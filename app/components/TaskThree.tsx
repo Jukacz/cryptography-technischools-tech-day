@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import NodeRSA from "node-rsa";
+import {goToNextStage} from "@/app/helper";
+import {useRouter} from "next/navigation";
 
 // Funkcja generująca parę kluczy RSA
 const generateRSAKeys = () => {
@@ -19,6 +21,7 @@ const cleanKey = (key: string) => {
 };
 
 const TaskThree = () => {
+  const router = useRouter();
   const [publicKey, setPublicKey] = useState<string>("");
   const [privateKey, setPrivateKey] = useState<string>("");
   const [userPrivateKey, setUserPrivateKey] = useState<string>("");
@@ -57,6 +60,10 @@ const TaskThree = () => {
     if (cleanedUserKey === privateKey) {
       setMessages(decryptedMessages); // Zmieniamy wiadomości na odszyfrowane
       setMessage("Good job!");
+      setTimeout(() => {
+        goToNextStage(3);
+        router.push("/4");
+      }, 3000)
     } else {
       setMessage("Spróbuj ponownie");
     }

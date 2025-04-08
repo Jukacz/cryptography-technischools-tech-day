@@ -1,6 +1,11 @@
-import {useState} from "react";
+"use client"
+
+import {useEffect, useState} from "react";
+import {goToNextStage} from "@/app/helper";
+import {useRouter} from "next/navigation";
 
 const TaskFour = () => {
+    const router = useRouter();
     // Obiekt z imionami i ich zaszyfrowanymi odpowiednikami z różnymi przesunięciami
     const SzyfrBozy = {
         Monika: {
@@ -21,14 +26,27 @@ const TaskFour = () => {
         }
     };
 
-    const [monikaInput, setMonikaInput] = useState('');
-    const [dorotaInput, setDorotaInput] = useState('');
-    const [marekInput, setMarekInput] = useState('');
-    const [eustachyInput, setEustachyInput] = useState('');
+    const [monikaInput, setMonikaInput] = useState({guessed: false, value: ""});
+    const [dorotaInput, setDorotaInput] = useState({guessed: false, value: ""});
+    const [marekInput, setMarekInput] = useState({guessed: false, value: ""});
+    const [eustachyInput, setEustachyInput] = useState({guessed: false, value: ""});
+
+    const [isDone, setIsDone] = useState(false);
 
     const checkInput = (input: string, correctValue: string) => {
-        return input === correctValue ? "Poprawnie!" : "Spróbuj jeszcze raz";
+        return input === correctValue;
     };
+
+    useEffect(() => {
+        if (monikaInput.guessed && dorotaInput.guessed && marekInput.guessed && eustachyInput.guessed) {
+            setIsDone(true);
+            setTimeout(() => {
+                goToNextStage(4);
+                router.push("/5");
+            }, 3000);
+        }
+
+    }, [monikaInput, dorotaInput, marekInput, eustachyInput]);
 
     return (
         <div className="flex items-center justify-center mt-32 bg-fixed bg-cover bg-center relative">
@@ -49,6 +67,10 @@ const TaskFour = () => {
                     Szyfr Cezara - Rozszyfruj Imiona
                 </h2>
 
+                {isDone &&
+                    <p className="text-green-500 mb-3">Brawo udało sie rozwiazac wsyzstkie imiona, czas przejsc do ostatniego
+                        etapu!</p>}
+
                 <div className="space-y-6">
                     <div>
                         <label className="block mb-2 text-sm text-gray-300">
@@ -56,19 +78,22 @@ const TaskFour = () => {
                         </label>
                         <input
                             type="text"
-                            value={monikaInput}
-                            onChange={(e) => setMonikaInput(e.target.value)}
+                            value={monikaInput.value}
+                            onChange={(e) => setMonikaInput({
+                                guessed: checkInput(e.target.value, SzyfrBozy.Monika.encrypted),
+                                value: e.target.value
+                            })}
                             placeholder="Wpisz zaszyfrowane imię"
                             className="block w-full p-2 border border-blue-400 rounded-xl focus:ring-2 focus:ring-blue-500 bg-black opacity-50 text-white"
                         />
                         <p
                             className={`mt-2 text-sm ${
-                                monikaInput === SzyfrBozy.Monika.encrypted
+                                monikaInput.value === SzyfrBozy.Monika.encrypted
                                     ? 'text-green-500'
                                     : 'text-red-500'
                             }`}
                         >
-                            {checkInput(monikaInput, SzyfrBozy.Monika.encrypted)}
+                            {checkInput(monikaInput.value, SzyfrBozy.Monika.encrypted) ? "Poprawnie!" : "Spróbuj jeszcze raz"}
                         </p>
                     </div>
 
@@ -78,19 +103,24 @@ const TaskFour = () => {
                         </label>
                         <input
                             type="text"
-                            value={dorotaInput}
-                            onChange={(e) => setDorotaInput(e.target.value)}
+                            value={dorotaInput.value}
+                            onChange={(e) =>
+                                setDorotaInput({
+                                    guessed: checkInput(e.target.value, SzyfrBozy.Dorota.encrypted),
+                                    value: e.target.value
+                                })
+                            }
                             placeholder="Wpisz zaszyfrowane imię"
                             className="block w-full p-2 border border-blue-400 rounded-xl focus:ring-2 focus:ring-blue-500 bg-black opacity-50 text-white"
                         />
                         <p
                             className={`mt-2 text-sm ${
-                                dorotaInput === SzyfrBozy.Dorota.encrypted
+                                dorotaInput.value === SzyfrBozy.Dorota.encrypted
                                     ? 'text-green-500'
                                     : 'text-red-500'
                             }`}
                         >
-                            {checkInput(dorotaInput, SzyfrBozy.Dorota.encrypted)}
+                            {checkInput(dorotaInput.value, SzyfrBozy.Dorota.encrypted) ? "Poprawnie!" : "Spróbuj jeszcze raz"}
                         </p>
                     </div>
 
@@ -100,19 +130,24 @@ const TaskFour = () => {
                         </label>
                         <input
                             type="text"
-                            value={marekInput}
-                            onChange={(e) => setMarekInput(e.target.value)}
+                            value={marekInput.value}
+                            onChange={(e) => (
+                                setMarekInput({
+                                    guessed: checkInput(e.target.value, SzyfrBozy.Marek.encrypted),
+                                    value: e.target.value
+                                })
+                            )}
                             placeholder="Wpisz zaszyfrowane imię"
                             className="block w-full p-2 border border-blue-400 rounded-xl focus:ring-2 focus:ring-blue-500 bg-black opacity-50 text-white"
                         />
                         <p
                             className={`mt-2 text-sm ${
-                                marekInput === SzyfrBozy.Marek.encrypted
+                                marekInput.value === SzyfrBozy.Marek.encrypted
                                     ? 'text-green-500'
                                     : 'text-red-500'
                             }`}
                         >
-                            {checkInput(marekInput, SzyfrBozy.Marek.encrypted)}
+                            {checkInput(marekInput.value, SzyfrBozy.Marek.encrypted) ? "Poprawnie!" : "Spróbuj jeszcze raz"}
                         </p>
                     </div>
 
@@ -122,19 +157,24 @@ const TaskFour = () => {
                         </label>
                         <input
                             type="text"
-                            value={eustachyInput}
-                            onChange={(e) => setEustachyInput(e.target.value)}
+                            value={eustachyInput.value}
+                            onChange={(e) => (
+                                setEustachyInput({
+                                    guessed: checkInput(e.target.value, SzyfrBozy.Eustachy.encrypted),
+                                    value: e.target.value
+                                })
+                            )}
                             placeholder="Wpisz zaszyfrowane imię"
                             className="block w-full p-2 border border-blue-400 rounded-xl focus:ring-2 focus:ring-blue-500 bg-black opacity-50 text-white"
                         />
                         <p
                             className={`mt-2 text-sm ${
-                                eustachyInput === SzyfrBozy.Eustachy.encrypted
+                                eustachyInput.value === SzyfrBozy.Eustachy.encrypted
                                     ? 'text-green-500'
                                     : 'text-red-500'
                             }`}
                         >
-                            {checkInput(eustachyInput, SzyfrBozy.Eustachy.encrypted)}
+                            {checkInput(eustachyInput.value, SzyfrBozy.Eustachy.encrypted) ? "Poprawnie!" : "Spróbuj jeszcze raz"}
                         </p>
                     </div>
                 </div>

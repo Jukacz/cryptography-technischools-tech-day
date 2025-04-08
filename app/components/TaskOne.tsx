@@ -1,4 +1,8 @@
+"use client"
+
 import { useEffect, useState } from "react";
+import {useRouter} from "next/navigation";
+import {goToNextStage} from "@/app/helper";
 
 const credentials: { [key: string]: string } = {
   olson: "prawojazdy",
@@ -18,6 +22,7 @@ const nicknames = Object.keys(credentials);
 const TaskOne = () => {
   const [nickname, setNickname] = useState<string>("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
   const [flag, setFlag] = useState("");
   const [error, setError] = useState("");
 
@@ -28,7 +33,11 @@ const TaskOne = () => {
   const handleSubmit = () => {
     const correctPassword = credentials[nickname];
     if (password === correctPassword) {
-      setFlag("Zalogowano pomyślnie");
+      setFlag("Zalogowano pomyślnie, za 3 sekundy zostaniesz przeniesiony do kolejnego etapu");
+      setTimeout(() => {
+        goToNextStage(1);
+        router.push("/2");
+      }, 2000)
       setError("");
     } else {
       setError("Nice try diddy");

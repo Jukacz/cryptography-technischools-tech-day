@@ -34,7 +34,7 @@ const TaskFive = () => {
         }
         if (userInput === BinaryPuzzle.correctAnswer) {
             setFeedback("Poprawnie!");
-            setResult("Poprawnie! Przeszedłeś etap 5!");
+            setResult("Poprawnie! Przeszedłeś ostatni etap, mega sigma!");
         } else {
             setFeedback("Spróbuj jeszcze raz");
             setResult('');
