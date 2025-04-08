@@ -4,11 +4,11 @@ const TaskFour = () => {
     // Obiekt z imionami i ich zaszyfrowanymi odpowiednikami z różnymi przesunięciami
     const SzyfrBozy = {
         Monika: {
-            encrypted: "Zbagxn", // Przesunięcie o 13 (ROT13)
+            encrypted: "Zbavxn", // Przesunięcie o 13 (ROT13)
             shift: 13
         },
         Dorota: {
-            encrypted: "Qbebgd", // Przesunięcie o 5
+            encrypted: "Itwtyf", // Przesunięcie o 5
             shift: 5
         },
         Marek: {
@@ -16,7 +16,7 @@ const TaskFour = () => {
             shift: 3
         },
         Eustachy: {
-            encrypted: "Ndbijowf", // Przesunięcie o 7
+            encrypted: "Lbzahjof", // Przesunięcie o 7
             shift: 7
         }
     };
